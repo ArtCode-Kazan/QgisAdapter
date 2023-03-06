@@ -1,0 +1,13 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+# Environments
+.env
+venv
+
+# Temp folders
+.pytest_cache
+__pycache__
