@@ -5,7 +5,9 @@ from psycopg2 import connect
 
 from qgis.core import (QgsProject, QgsVectorLayer, QgsRasterLayer,
                        QgsDataSourceUri, QgsLayerTreeGroup,
-                       QgsLayerTreeLayer, QgsLayerTreeNode)
+                       QgsLayerTreeLayer, QgsLayerTreeNode,
+                       QgsExpressionContextUtils
+                       )
 from PyQt5.QtWidgets import QMessageBox
 
 import processing
@@ -66,6 +68,23 @@ class PostgresConnection:
                 password=self.password,
             )
         return self.__connection
+
+    @staticmethod
+    def get_from_env() -> 'PostgresConnection':
+        project = QgsProject.instance()
+        project_scope = QgsExpressionContextUtils.projectScope(project)
+        host = project_scope.variable('host')
+        port = int(project_scope.variable('port'))
+        db_name = project_scope.variable('dbname')
+        user = project_scope.variable('user')
+        password = project_scope.variable('password')
+        return PostgresConnection(
+            host=host,
+            db_name=db_name,
+            user=user,
+            password=password,
+            port=port
+        )
 
 
 class QGISAdapter:
@@ -284,22 +303,12 @@ def openProject():
 
 
 def saveProject():
-    conn_params = PostgresConnection(
-        host='192.168.1.8',
-        db_name='projectdb',
-        user='postgres',
-        password='aspireone533'
-    )
+    conn_params = PostgresConnection.get_from_env()
     adapter = QGISAdapter(connection_params=conn_params)
     adapter.run()
 
 
 def closeProject():
-    conn_params = PostgresConnection(
-        host='192.168.1.8',
-        db_name='projectdb',
-        user='postgres',
-        password='aspireone533'
-    )
+    conn_params = PostgresConnection.get_from_env()
     adapter = QGISAdapter(connection_params=conn_params)
     adapter.run()
