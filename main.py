@@ -116,7 +116,7 @@ class QGISAdapter:
         for layer in self.get_all_vector_layers():
             layer_source, is_spatial = layer.source(), layer.isSpatial()
             if 'dbname' not in layer_source and is_spatial:
-               shp_layers.append(layer)
+                shp_layers.append(layer)
         return shp_layers
 
     @property
@@ -279,13 +279,27 @@ class QGISAdapter:
                 new_group.insertChildNode(-1, QgsLayerTreeLayer(layer))
 
 
-conn_params = PostgresConnection(
-    host='192.168.1.8',
-    db_name='projectdb',
-    user='postgres',
-    password='aspireone533'
+def openProject():
+    pass
 
-)
 
-adapter = QGISAdapter(connection_params=conn_params)
-adapter.run()
+def saveProject():
+    conn_params = PostgresConnection(
+        host='192.168.1.8',
+        db_name='projectdb',
+        user='postgres',
+        password='aspireone533'
+    )
+    adapter = QGISAdapter(connection_params=conn_params)
+    adapter.run()
+
+
+def closeProject():
+    conn_params = PostgresConnection(
+        host='192.168.1.8',
+        db_name='projectdb',
+        user='postgres',
+        password='aspireone533'
+    )
+    adapter = QGISAdapter(connection_params=conn_params)
+    adapter.run()
