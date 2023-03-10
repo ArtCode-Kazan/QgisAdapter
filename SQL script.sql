@@ -1,0 +1,10 @@
+GRANT CONNECT, CREATE ON DATABASE "NameOfDB" TO "NameOfTheUser";
+
+GRANT CREATE, CONNECT ON DATABASE "NamOfDB" TO "NameOfTheUser";
+
+GRANT ALL ON SCHEMA public TO NameOfTheUser;
+
+CREATE EXTENSION postgis;
+CREATE EXTENSION postgis_raster;
+CREATE EXTENSION postgis_topology;
+CREATE EXTENSION postgis_sfcgal;
