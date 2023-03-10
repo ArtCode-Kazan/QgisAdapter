@@ -203,7 +203,18 @@ class QGISAdapter:
             )
         return loading_layers
 
+    def is_style_table_exist(self):
+        connection = self.connection_params.connection
+        cursor = connection.cursor()
+        cursor.execute(
+            'SELECT EXISTS(SELECT FROM information_schema.tables WHERE '
+            'table_schema = \'public\' AND table_name = \'layer_styles\');'
+        )
+        return cursor.fetchone()[0]
+
     def remove_style_from_db(self, style_name: str):
+        if not self.is_style_table_exist():
+            return
         connection = self.connection_params.connection
         cursor = connection.cursor()
         cursor.execute(
@@ -218,6 +229,9 @@ class QGISAdapter:
                 QgsProject.instance().removeMapLayer(layer)
 
     def patch_layer_styles_table(self):
+        if not self.is_style_table_exist():
+            return
+
         connection = self.connection_params.connection
         cursor = connection.cursor()
         query = (
